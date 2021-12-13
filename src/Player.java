@@ -14,6 +14,11 @@ public class Player {
         maxWeightInBag = 25;
     }
 
+    public Player() {
+        bag = new ArrayList<>();
+        maxWeightInBag = 25;
+    }
+
     //setters
     public void setMaxWeightInBag(double maxWeightInBag) {
         this.maxWeightInBag = maxWeightInBag;
@@ -21,6 +26,10 @@ public class Player {
 
     public void setCurrentRoom(Room currentRoom) {
         this.currentRoom = currentRoom;
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
     //getters
