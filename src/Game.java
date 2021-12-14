@@ -40,38 +40,52 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office, cellar;
+        Room aarde, neptunes, uranus, sun, mars, jupiter, mercurius, komeet, saturnus, venus;
         Item promoboard, ashtray;
 
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
-        cellar = new Room("in the cellar with all the provisions for the pub");
+        aarde = new Room("aarde");
+        neptunes = new Room("neptunes");
+        uranus = new Room("uranus");
+        sun = new Room("sun");
+        mars = new Room("mars");
+        jupiter = new Room("jupiter");
+        mercurius = new Room("mercurius");
+        komeet = new Room("komeet");
+        saturnus = new Room("saturnus");
+        venus = new Room("venus");
 
         //create the items
         promoboard = new Item("Promoboard", "University promoboard", 2.3);
         ashtray = new Item("Ashtray", "Big yellow ashtray", 4.6);
 
         //add items to rooms
-        outside.addItem(promoboard);
-        outside.addItem(ashtray);
+        aarde.addItem(promoboard);
+        aarde.addItem(ashtray);
 
         // initialise room exits
-        outside.setExit("east", theater);
-        outside.setExit("south", lab);
-        outside.setExit("west", pub);
-        theater.setExit("west", outside);
-        pub.setExit("east", outside);
-        pub.setExit("down", cellar);
-        cellar.setExit("up", pub);
-        lab.setExit("north", outside);
-        lab.setExit("east", office);
-        office.setExit("west", lab);
+        aarde.setExit("north", neptunes);
+        aarde.setExit("east", mars);
+        neptunes.setExit("north", sun);
+        neptunes.setExit("east", uranus);
+        neptunes.setExit("south", aarde);
+        uranus.setExit("west", neptunes);
+        sun.setExit("east", saturnus);
+        sun.setExit("south", aarde);
+        saturnus.setExit("east", venus);
+        saturnus.setExit("south", komeet);
+        saturnus.setExit("west", sun);
+        venus.setExit("west", saturnus);
+        komeet.setExit("north", saturnus);
+        komeet.setExit("south", mercurius);
+        mercurius.setExit("north", komeet);
+        mercurius.setExit("west", mars);
+        mars.setExit("north", jupiter);
+        mars.setExit("east", mercurius);
+        mars.setExit("west", aarde);
+        jupiter.setExit("south", mars);
 
-        player.setCurrentRoom(outside);  // start game outside
+        player.setCurrentRoom(aarde);  // start game outside
     }
 
     /**
