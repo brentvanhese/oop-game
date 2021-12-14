@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -40,52 +41,77 @@ public class Game
      */
     private void createRooms()
     {
-        Room aarde, neptunes, uranus, sun, mars, jupiter, mercurius, komeet, saturnus, venus;
-        Item promoboard, ashtray;
+        Room earth, neptunes, uranus, sun, mars, jupiter, mercurius, comet, saturnus, venus;
+        Item bom1, bom2, bom3, O2Booster, code1, code2, code3;
 
         // create the rooms
-        aarde = new Room("aarde");
+        earth = new Room("earth");
         neptunes = new Room("neptunes");
         uranus = new Room("uranus");
         sun = new Room("sun");
         mars = new Room("mars");
         jupiter = new Room("jupiter");
         mercurius = new Room("mercurius");
-        komeet = new Room("komeet");
+        comet = new Room("comet");
         saturnus = new Room("saturnus");
         venus = new Room("venus");
 
+        //creat unlock codes
+        Random unlockCodeGenerator = new Random();
+        int low = 100000;
+        int high = 999999;
+        int unlockCode1 = unlockCodeGenerator.nextInt(high-low) + low;
+        int unlockCode2 = unlockCodeGenerator.nextInt(high-low) + low;
+        int unlockCode3 = unlockCodeGenerator.nextInt(high-low) + low;
+
         //create the items
-        promoboard = new Item("Promoboard", "University promoboard", 2.3);
-        ashtray = new Item("Ashtray", "Big yellow ashtray", 4.6);
+        bom1 = new Item("Bom 1", "", 10.0);
+        bom2 = new Item("Bom 2", "", 10.0);
+        bom3 = new Item("Bom 3", "", 10.0);
+        O2Booster = new Item("O2 booster", "bring your O2 to 100%", 0.5);
+        code1 = new Item("Code 1", Integer.toString(unlockCode1), 0.1);
+        code2 = new Item("Code 2", Integer.toString(unlockCode2), 0.1);
+        code3 = new Item("Code 3", Integer.toString(unlockCode3), 0.1);
 
         //add items to rooms
-        aarde.addItem(promoboard);
-        aarde.addItem(ashtray);
+        earth.addItem(code1);
+        earth.addItem(code2);
+        earth.addItem(code3);
+        neptunes.addItem(O2Booster);
 
         // initialise room exits
-        aarde.setExit("north", neptunes);
-        aarde.setExit("east", mars);
+        earth.setExit("north", neptunes);
+        earth.setExit("east", mars);
         neptunes.setExit("north", sun);
         neptunes.setExit("east", uranus);
-        neptunes.setExit("south", aarde);
+        neptunes.setExit("south", earth);
         uranus.setExit("west", neptunes);
         sun.setExit("east", saturnus);
-        sun.setExit("south", aarde);
+        sun.setExit("south", earth);
         saturnus.setExit("east", venus);
-        saturnus.setExit("south", komeet);
+        saturnus.setExit("south", comet);
         saturnus.setExit("west", sun);
         venus.setExit("west", saturnus);
-        komeet.setExit("north", saturnus);
-        komeet.setExit("south", mercurius);
-        mercurius.setExit("north", komeet);
+        comet.setExit("north", saturnus);
+        comet.setExit("south", mercurius);
+        mercurius.setExit("north", comet);
         mercurius.setExit("west", mars);
         mars.setExit("north", jupiter);
         mars.setExit("east", mercurius);
-        mars.setExit("west", aarde);
+        mars.setExit("west", earth);
         jupiter.setExit("south", mars);
 
-        player.setCurrentRoom(aarde);  // start game outside
+        player.setCurrentRoom(earth);  // start game outside
+    }
+
+    public void createItems(){
+
+
+
+
+
+
+        //todo put items in random rooms (not earth or comet)
     }
 
     /**
