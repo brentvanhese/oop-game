@@ -41,6 +41,7 @@ public class Game
      */
     private void createRooms()
     {
+        //name rooms and items
         Room earth, neptunes, uranus, sun, mars, jupiter, mercurius, comet, saturnus, venus;
         Item bom1, bom2, bom3, O2Booster, code1, code2, code3;
 
@@ -69,11 +70,12 @@ public class Game
         bom2 = new Item("Bom2", "", 10.0);
         bom3 = new Item("Bom3", "", 10.0);
         O2Booster = new Item("O2-booster", "bring your O2 to 100%", 0.5);
-        code1 = new Item("Code1", Integer.toString(unlockCode1), 1);
+        code1 = new Item("Code1", Integer.toString(unlockCode1), 0.1);
         code2 = new Item("Code2", Integer.toString(unlockCode2), 0.1);
         code3 = new Item("Code3", Integer.toString(unlockCode3), 0.1);
 
         //add items to rooms
+        //todo put items and rooms in list and put the items in a random room except sun or comet
         earth.addItem(code1);
         earth.addItem(code2);
         earth.addItem(code3);
@@ -133,9 +135,8 @@ public class Game
     private void printWelcome()
     {
         System.out.println();
-        System.out.println("Welcome to the World of Zuul!");
-        System.out.println("World of Zuul is a new, incredibly boring adventure game.");
-        System.out.println("Type '" + CommandWord.HELP.getWord() + "' if you need help.");
+        System.out.println("Welcome astronaut " + player.getName());
+        System.out.println();
         System.out.println();
         printLocationInfo();
     }
