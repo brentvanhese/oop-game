@@ -65,13 +65,13 @@ public class Game
         int unlockCode3 = unlockCodeGenerator.nextInt(high-low) + low;
 
         //create the items
-        bom1 = new Item("Bom 1", "", 10.0);
-        bom2 = new Item("Bom 2", "", 10.0);
-        bom3 = new Item("Bom 3", "", 10.0);
-        O2Booster = new Item("O2 booster", "bring your O2 to 100%", 0.5);
-        code1 = new Item("Code 1", Integer.toString(unlockCode1), 0.1);
-        code2 = new Item("Code 2", Integer.toString(unlockCode2), 0.1);
-        code3 = new Item("Code 3", Integer.toString(unlockCode3), 0.1);
+        bom1 = new Item("Bom1", "", 10.0);
+        bom2 = new Item("Bom2", "", 10.0);
+        bom3 = new Item("Bom3", "", 10.0);
+        O2Booster = new Item("O2-booster", "bring your O2 to 100%", 0.5);
+        code1 = new Item("Code1", Integer.toString(unlockCode1), 1);
+        code2 = new Item("Code2", Integer.toString(unlockCode2), 0.1);
+        code3 = new Item("Code3", Integer.toString(unlockCode3), 0.1);
 
         //add items to rooms
         earth.addItem(code1);
@@ -101,17 +101,7 @@ public class Game
         mars.setExit("west", earth);
         jupiter.setExit("south", mars);
 
-        player.setCurrentRoom(earth);  // start game outside
-    }
-
-    public void createItems(){
-
-
-
-
-
-
-        //todo put items in random rooms (not earth or comet)
+        player.setCurrentRoom(earth);  // start game earth
     }
 
     /**

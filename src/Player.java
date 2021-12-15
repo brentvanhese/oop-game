@@ -11,7 +11,7 @@ public class Player {
     public Player(String name) {
         this.name = name;
         bag = new ArrayList<>();
-        maxWeightInBag = 25;
+        maxWeightInBag = 100;
     }
 
     public Player() {
@@ -55,8 +55,9 @@ public class Player {
         if (!bag.isEmpty()){
             bagInfo += "I have a bag which contains: ";
             for (Item bagItem : bag) {
-                bagInfo += "      " + bagItem.toString() + "\n";
+                bagInfo += "      " + bagItem.toString();
             }
+            bagInfo += "\n\n";
         }
         return bagInfo;
     }
