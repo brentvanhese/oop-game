@@ -3,6 +3,7 @@ public class Item {
     private String description;
     private double weight;
     private boolean isMovable;
+    private int code;
 
     public Item(String name, String description, double weight) {
         this.name = name;
@@ -15,8 +16,16 @@ public class Item {
         isMovable = movable;
     }
 
+    public void setCode(int code) {
+        this.code = code;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public int getCode() {
+        return code;
     }
 
     public String getDescription() {

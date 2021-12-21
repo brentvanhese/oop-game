@@ -67,12 +67,18 @@ public class Game
 
         //create the items
         bom1 = new Item("Bom1", "", 10.0);
+        bom1.setMovable(false);
         bom2 = new Item("Bom2", "", 10.0);
+        bom2.setMovable(false);
         bom3 = new Item("Bom3", "", 10.0);
+        bom3.setMovable(false);
         O2Booster = new Item("O2-booster", "bring your O2 to 100%", 0.5);
         code1 = new Item("Code1", Integer.toString(unlockCode1), 0.1);
+        code1.setCode(unlockCode1);
         code2 = new Item("Code2", Integer.toString(unlockCode2), 0.1);
+        code2.setCode(unlockCode2);
         code3 = new Item("Code3", Integer.toString(unlockCode3), 0.1);
+        code3.setCode(unlockCode3);
 
         //add items to rooms
         //todo put items and rooms in list and put the items in a random room except sun or comet
@@ -80,6 +86,9 @@ public class Game
         earth.addItem(code2);
         earth.addItem(code3);
         neptunes.addItem(O2Booster);
+        mars.addItem(bom1);
+        mars.addItem(bom2);
+        mars.addItem(bom3);
 
         // initialise room exits
         earth.setExit("north", neptunes);
@@ -182,6 +191,12 @@ public class Game
             case EAT:
                 eat();
                 break;
+            case USE:
+                use(command);
+                break;
+            case UNLOCK:
+                unlock(command);
+                break;
             default:
                 System.out.println("I don't know what you mean...");
         }
@@ -261,8 +276,10 @@ public class Game
         String itemName = command.getSecondWord();
         if (player.take(itemName)) {
             printLocationInfo();
-        } else {
+        } else if(player.isMovable(itemName)){
             System.out.println("There is no item here with the name " + itemName);
+        } else {
+            System.out.println("Item: " + itemName + " isn't movable, unlock it first.");
         }
     }
 
@@ -279,8 +296,39 @@ public class Game
         }
     }
 
-    public static void main(String[] args) {
-        Game game = new Game();
-        game.play();
+    public void use(Command command){
+        if (!command.hasSecondWord()){
+            System.out.println("Use what?");
+            return;
+        }
+        String itemName = command.getSecondWord();
+        if (player.use(itemName)){
+            printLocationInfo();
+        }
+        else{
+            System.out.println("There is no item in your bag with the name " + itemName);
+        }
+    }
+
+    public void unlock(Command command){
+        if (!command.hasSecondWord()){
+            System.out.println("Move what?");
+            return;
+        }
+        String itemName = command.getSecondWord();
+        System.out.println("Please give the unlock code for " + itemName + " :");
+        int unlockCode = scanner.nextInt();
+        if (player.hasItem(itemName)){
+            if(player.unlock(itemName, unlockCode)){
+                printLocationInfo();
+                System.out.println("Item: " + itemName + " is unlocked.");
+            }
+            else {
+                System.out.println("Wrong code, please try again.");
+            }
+        }
+        else {
+            System.out.println("There is no item with name " + itemName);
+        }
     }
 }

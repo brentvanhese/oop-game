@@ -100,6 +100,28 @@ public class Player {
         }
     }
 
+    public boolean use(String itemname){
+        boolean check = false;
+        if (itemname.equals("O2-booster")){
+            for (Item i : bag) {
+                if(i.getName().equals("O2-booster")){
+                    oxygen = 100;
+                    check = true;
+                    break;
+                }
+            }
+        }
+        return check;
+    }
+
+    public boolean isMovable(String itemName){
+        if (currentRoom.hasItem(itemName)){
+            Item i = currentRoom.getItem(itemName);
+            return i.getIsMovable();
+        }
+        return false;
+    }
+
     public boolean take(String itemName){
         if (currentRoom.hasItem(itemName)) {
             Item item = currentRoom.getItem(itemName);
@@ -131,12 +153,21 @@ public class Player {
         return false;
     }
 
-    public Item getItem(String itemName){
+    public Item getItem(String itemName) {
         for (Item bagItem : bag) {
-            if (bagItem.getName().equals(itemName)){
+            if (bagItem.getName().equals(itemName)) {
                 return bagItem;
             }
         }
         return null;
+    }
+
+    public boolean unlock(String itemName, int unlockCode){
+        Item i = currentRoom.getItem(itemName);
+        if (i.getCode() == unlockCode){
+            i.setMovable(true);
+            take(itemName);
+        }
+        return false;
     }
 }
