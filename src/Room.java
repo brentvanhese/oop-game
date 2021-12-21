@@ -19,6 +19,7 @@ import java.util.HashMap;
 public class Room
 {
     private String description;
+    private boolean gasplaneet = false;
     public HashMap<String, Room> exits;
     private ArrayList<Item> items;
 
@@ -33,6 +34,14 @@ public class Room
         this.description = description;
         exits = new HashMap<>();
         items = new ArrayList<>();
+    }
+
+    public boolean isGasplaneet() {
+        return gasplaneet;
+    }
+
+    public void setGasplaneet(boolean gasplaneet) {
+        this.gasplaneet = gasplaneet;
     }
 
     public void addItem(Item item) {

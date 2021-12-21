@@ -89,7 +89,7 @@ public class Game
         neptunes.setExit("south", earth);
         uranus.setExit("west", neptunes);
         sun.setExit("east", saturnus);
-        sun.setExit("south", earth);
+        sun.setExit("south", neptunes);
         saturnus.setExit("east", venus);
         saturnus.setExit("south", comet);
         saturnus.setExit("west", sun);
@@ -104,6 +104,10 @@ public class Game
         jupiter.setExit("south", mars);
 
         player.setCurrentRoom(earth);  // start game earth
+
+        //initialize gasplanets
+        saturnus.setGasplaneet(true);
+        jupiter.setGasplaneet(true);
     }
 
     /**

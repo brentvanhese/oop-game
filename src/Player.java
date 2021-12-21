@@ -6,6 +6,7 @@ public class Player {
     private ArrayList<Item> bag;
     private double maxWeightInBag;
     private Room currentRoom;
+    private int oxygen = 100;
 
     //constructor
     public Player(String name) {
@@ -45,6 +46,11 @@ public class Player {
         return currentRoom;
     }
 
+    public void setOxygen(int oxygen) {
+        if (oxygen > 100) return;
+        this.oxygen = oxygen;
+    }
+
     //methodes
     public void addItem(Item item){
         bag.add(item);
@@ -66,6 +72,7 @@ public class Player {
         String info = "My name is " + name;
         info += "\n" + getBagInfo();
         info += "And I am " + currentRoom.getLongDescription();
+        info += "\nOxygen: " + oxygen + "%";
 
         return info;
     }
@@ -74,7 +81,23 @@ public class Player {
         Room nextRoom = getCurrentRoom().getExit(direction);
         if (nextRoom == null) return false;
         currentRoom = nextRoom;
+        changeOxygen(nextRoom);
         return true;
+    }
+
+    private void changeOxygen(Room r){
+        if(r.getDescription().equals("earth")){
+            oxygen = 100;
+            return;
+        }
+        if(r.isGasplaneet()){
+            oxygen += 10;
+            oxygen -= 20;
+        }
+        else{
+            oxygen +=10;
+            oxygen -= 15;
+        }
     }
 
     public boolean take(String itemName){
