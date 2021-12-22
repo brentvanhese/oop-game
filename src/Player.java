@@ -69,7 +69,9 @@ public class Player {
     }
 
     public String getInfo(){
-        String info = "My name is " + name;
+        String info = "";
+        info += currentPlanet.getPersonString();
+        info += "\nMy name is " + name;
         info += "\nOxygen: " + oxygen + "%";
         info += "\n" + getBagInfo();
         info += "And I am on " + currentPlanet.getLongDescription();

@@ -21,6 +21,7 @@ public class Planet
     private String description;
     private boolean gasplaneet = false;
     public HashMap<String, Planet> exits;
+    private ArrayList<Person> persons;
     private ArrayList<Item> items;
 
     /**
@@ -34,6 +35,7 @@ public class Planet
         this.description = description;
         exits = new HashMap<>();
         items = new ArrayList<>();
+        persons = new ArrayList<>();
     }
 
     public boolean isGasplaneet() {
@@ -50,6 +52,10 @@ public class Planet
 
     public void removeItem(Item item){
         items.remove(item);
+    }
+
+    public void addPerson(Person person){
+        persons.add(person);
     }
 
     /**
@@ -71,6 +77,19 @@ public class Planet
         }
         info += "\n" + getExitString();
         return info;
+    }
+
+    public String getPersonString(){
+        String output = "";
+        if (persons.isEmpty()){
+            output = "";
+        }
+        else{
+            for (Person p : persons) {
+                output += "\n" + p.toString();
+            }
+        }
+        return output;
     }
 
     public void setExit(String direction, Planet planet){

@@ -31,7 +31,7 @@ public class Game
     public Game()
     {
         player = new Player();
-        createRooms();
+        createPlanets();
         parser = new Parser();
         scanner = new Scanner(System.in);
     }
@@ -39,13 +39,14 @@ public class Game
     /**
      * Create all the rooms and link their exits together.
      */
-    private void createRooms()
+    private void createPlanets()
     {
         //name rooms and items
         Planet earth, neptunes, uranus, sun, mars, jupiter, mercurius, comet, saturnus, venus;
         Item bom1, bom2, bom3, O2Booster, code1, code2, code3;
+        Person elonMusk;
 
-        // create the rooms
+        // create the planets
         earth = new Planet("earth");
         neptunes = new Planet("neptunes");
         uranus = new Planet("uranus");
@@ -80,7 +81,20 @@ public class Game
         code3 = new Item("Code3", Integer.toString(unlockCode3), 0.1);
         bom3.setCode(unlockCode3);
 
-        //add items to rooms
+        //create persons
+        String txtElon = "";
+        txtElon += "\tWelcome SpaceX astronaut " + player.getName();
+        txtElon+= "\n\t\t\t\tWe are dealing with a major problem, there is a comet in bound to the earth.";
+        txtElon+= "\n\t\t\t\tYou are the only astronaut that can fly our Starship 5.0.";
+        txtElon+= "\n\t\t\t\tYou need to fly it to all the planets. We have put on different planets bombs and codes to unlock them.";
+        txtElon+= "\n\t\t\t\tWe don't know anymore where we have put them and the computer where we had written it has crashed.";
+        txtElon+= "\n\t\t\t\tPlease go get the bombs and put them on the comet, so that you can them explote from earth.";
+        txtElon+= "\n\t\t\t\tHold in mind that your spacesuit is still a prototype, so you will lose 15% on a normal planet and 20% gas planet. Everytime you go back in your Starship get 10%.";
+        txtElon+= "\n\t\t\t\tGo save the world " + player.getName() + "!";
+
+        elonMusk = new Person("Elon Musk" , txtElon);
+
+        //add items to planets
         //todo put items and rooms in list and put the items in a random room except sun or comet
         earth.addItem(code1);
         earth.addItem(code2);
@@ -90,7 +104,10 @@ public class Game
         mars.addItem(bom2);
         mars.addItem(bom3);
 
-        // initialise room exits
+        //add persons to planet
+        earth.addPerson(elonMusk);
+
+        // initialise planets exits
         earth.setExit("north", neptunes);
         earth.setExit("east", mars);
         neptunes.setExit("north", sun);
@@ -148,15 +165,6 @@ public class Game
     //todo make person that talks to player when you see him for the first time
     private void printWelcome()
     {
-        System.out.println();
-        System.out.println("Elon Musk:      Welcome SpaceX astronaut " + player.getName());
-        System.out.println("                We are dealing with a major problem, there is a comet in bound to the earth.");
-        System.out.println("                You are the only astronaut that can fly our Starship 5.0.");
-        System.out.println("                You need to fly it to all the planets. We have put on different planets bombs and codes to unlock them.");
-        System.out.println("                We don't know anymore where we have put them and the computer where we had written it has crashed.");
-        System.out.println("                Please go get the bombs and put them on the comet, so that you can them explote from earth.");
-        System.out.println("                Hold in mind that your spacesuit is still a prototype, so you will lose 15% on a normal planet and 20% gas planet. Everytime you go back in your Starship get 10%.");
-        System.out.println("                Go save the world " + player.getName() + "!");
         System.out.println();
         System.out.println();
         printLocationInfo();
