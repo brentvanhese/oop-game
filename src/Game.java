@@ -145,6 +145,7 @@ public class Game
     /**
      * Print out the opening message for the player.
      */
+    //todo make person that talks to player when you see him for the first time
     private void printWelcome()
     {
         System.out.println();
