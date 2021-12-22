@@ -170,7 +170,6 @@ public class Player {
         Item i = currentPlanet.getItem(itemName);
         if (i.getCode() == unlockCode){
             i.setMovable(true);
-            take(itemName);
         }
         return false;
     }

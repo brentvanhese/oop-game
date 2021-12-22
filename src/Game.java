@@ -148,7 +148,14 @@ public class Game
     private void printWelcome()
     {
         System.out.println();
-        System.out.println("Welcome astronaut " + player.getName());
+        System.out.println("Elon Musk:      Welcome SpaceX astronaut " + player.getName());
+        System.out.println("                We are dealing with a major problem, there is a comet in bound to the earth.");
+        System.out.println("                You are the only astronaut that can fly our Starship 5.0.");
+        System.out.println("                You need to fly it to all the planets. We have put on different planets bombs and codes to unlock them.");
+        System.out.println("                We don't know anymore where we have put them and the computer where we had written it has crashed.");
+        System.out.println("                Please go get the bombs and put them on the comet, so that you can them explote from earth.");
+        System.out.println("                Hold in mind that your spacesuit is still a prototype, so you will lose 15% on a normal planet and 20% gas planet. Everytime you go back in your Starship get 10%.");
+        System.out.println("                Go save the world " + player.getName() + "!");
         System.out.println();
         System.out.println();
         printLocationInfo();
@@ -323,7 +330,7 @@ public class Game
                 System.out.println("Wrong code, please try again.");
             }
             else {
-                System.out.println(itemName + " is unlocked.");
+                System.out.println(itemName + " is unlocked.\n");
                 printLocationInfo();
             }
         }
