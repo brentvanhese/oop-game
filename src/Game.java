@@ -42,20 +42,20 @@ public class Game
     private void createRooms()
     {
         //name rooms and items
-        Room earth, neptunes, uranus, sun, mars, jupiter, mercurius, comet, saturnus, venus;
+        Planet earth, neptunes, uranus, sun, mars, jupiter, mercurius, comet, saturnus, venus;
         Item bom1, bom2, bom3, O2Booster, code1, code2, code3;
 
         // create the rooms
-        earth = new Room("earth");
-        neptunes = new Room("neptunes");
-        uranus = new Room("uranus");
-        sun = new Room("sun");
-        mars = new Room("mars");
-        jupiter = new Room("jupiter");
-        mercurius = new Room("mercurius");
-        comet = new Room("comet");
-        saturnus = new Room("saturnus");
-        venus = new Room("venus");
+        earth = new Planet("earth");
+        neptunes = new Planet("neptunes");
+        uranus = new Planet("uranus");
+        sun = new Planet("the sun");
+        mars = new Planet("mars");
+        jupiter = new Planet("jupiter");
+        mercurius = new Planet("mercurius");
+        comet = new Planet("the comet");
+        saturnus = new Planet("saturnus");
+        venus = new Planet("venus");
 
         //creat unlock codes
         Random unlockCodeGenerator = new Random();
@@ -74,11 +74,11 @@ public class Game
         bom3.setMovable(false);
         O2Booster = new Item("O2-booster", "bring your O2 to 100%", 0.5);
         code1 = new Item("Code1", Integer.toString(unlockCode1), 0.1);
-        code1.setCode(unlockCode1);
+        bom1.setCode(unlockCode1);
         code2 = new Item("Code2", Integer.toString(unlockCode2), 0.1);
-        code2.setCode(unlockCode2);
+        bom2.setCode(unlockCode2);
         code3 = new Item("Code3", Integer.toString(unlockCode3), 0.1);
-        code3.setCode(unlockCode3);
+        bom3.setCode(unlockCode3);
 
         //add items to rooms
         //todo put items and rooms in list and put the items in a random room except sun or comet
@@ -279,7 +279,7 @@ public class Game
         } else if(player.isMovable(itemName)){
             System.out.println("There is no item here with the name " + itemName);
         } else {
-            System.out.println("Item: " + itemName + " isn't movable, unlock it first.");
+            System.out.println(itemName + " isn't movable, unlock it first.");
         }
     }
 
@@ -318,13 +318,13 @@ public class Game
         String itemName = command.getSecondWord();
         System.out.println("Please give the unlock code for " + itemName + " :");
         int unlockCode = scanner.nextInt();
-        if (player.hasItem(itemName)){
+        if (player.checkItem(itemName)){
             if(player.unlock(itemName, unlockCode)){
-                printLocationInfo();
-                System.out.println("Item: " + itemName + " is unlocked.");
+                System.out.println("Wrong code, please try again.");
             }
             else {
-                System.out.println("Wrong code, please try again.");
+                System.out.println(itemName + " is unlocked.");
+                printLocationInfo();
             }
         }
         else {

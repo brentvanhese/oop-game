@@ -5,7 +5,7 @@ public class Player {
     private String name;
     private ArrayList<Item> bag;
     private double maxWeightInBag;
-    private Room currentRoom;
+    private Planet currentPlanet;
     private int oxygen = 100;
 
     //constructor
@@ -25,8 +25,8 @@ public class Player {
         this.maxWeightInBag = maxWeightInBag;
     }
 
-    public void setCurrentRoom(Room currentRoom) {
-        this.currentRoom = currentRoom;
+    public void setCurrentRoom(Planet currentPlanet) {
+        this.currentPlanet = currentPlanet;
     }
 
     public void setName(String name){
@@ -42,8 +42,8 @@ public class Player {
         return maxWeightInBag;
     }
 
-    public Room getCurrentRoom() {
-        return currentRoom;
+    public Planet getCurrentRoom() {
+        return currentPlanet;
     }
 
     public void setOxygen(int oxygen) {
@@ -70,22 +70,22 @@ public class Player {
 
     public String getInfo(){
         String info = "My name is " + name;
-        info += "\n" + getBagInfo();
-        info += "And I am " + currentRoom.getLongDescription();
         info += "\nOxygen: " + oxygen + "%";
+        info += "\n" + getBagInfo();
+        info += "And I am on " + currentPlanet.getLongDescription();
 
         return info;
     }
 
     public boolean go(String direction){
-        Room nextRoom = getCurrentRoom().getExit(direction);
-        if (nextRoom == null) return false;
-        currentRoom = nextRoom;
-        changeOxygen(nextRoom);
+        Planet nextPlanet = getCurrentRoom().getExit(direction);
+        if (nextPlanet == null) return false;
+        currentPlanet = nextPlanet;
+        changeOxygen(nextPlanet);
         return true;
     }
 
-    private void changeOxygen(Room r){
+    private void changeOxygen(Planet r){
         if(r.getDescription().equals("earth")){
             oxygen = 100;
             return;
@@ -115,18 +115,18 @@ public class Player {
     }
 
     public boolean isMovable(String itemName){
-        if (currentRoom.hasItem(itemName)){
-            Item i = currentRoom.getItem(itemName);
+        if (currentPlanet.hasItem(itemName)){
+            Item i = currentPlanet.getItem(itemName);
             return i.getIsMovable();
         }
         return false;
     }
 
     public boolean take(String itemName){
-        if (currentRoom.hasItem(itemName)) {
-            Item item = currentRoom.getItem(itemName);
+        if (currentPlanet.hasItem(itemName)) {
+            Item item = currentPlanet.getItem(itemName);
             if (item.getIsMovable()){
-                currentRoom.removeItem(item);
+                currentPlanet.removeItem(item);
                 bag.add(item);
                 return true;
             }
@@ -138,7 +138,7 @@ public class Player {
         if (hasItem(itemName)){
             Item item = getItem(itemName);
             bag.remove(item);
-            currentRoom.addItem(item);
+            currentPlanet.addItem(item);
             return true;
         }
         return false;
@@ -162,8 +162,12 @@ public class Player {
         return null;
     }
 
+    public boolean checkItem(String itemName){
+        return currentPlanet.hasItem(itemName);
+    }
+
     public boolean unlock(String itemName, int unlockCode){
-        Item i = currentRoom.getItem(itemName);
+        Item i = currentPlanet.getItem(itemName);
         if (i.getCode() == unlockCode){
             i.setMovable(true);
             take(itemName);

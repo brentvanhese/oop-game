@@ -16,11 +16,11 @@ import java.util.HashMap;
  * @version 2011.07.31
  */
 
-public class Room
+public class Planet
 {
     private String description;
     private boolean gasplaneet = false;
-    public HashMap<String, Room> exits;
+    public HashMap<String, Planet> exits;
     private ArrayList<Item> items;
 
     /**
@@ -29,7 +29,7 @@ public class Room
      * "an open court yard".
      * @param description The room's description.
      */
-    public Room(String description)
+    public Planet(String description)
     {
         this.description = description;
         exits = new HashMap<>();
@@ -63,7 +63,7 @@ public class Room
     public String getLongDescription() {
         String info =  description;
         if (!items.isEmpty()){
-            info += ". This room contains items:";
+            info += ". This planet contains items:";
             for (Item item : items) {
                 info += item.toString();
             }
@@ -73,11 +73,11 @@ public class Room
         return info;
     }
 
-    public void setExit(String direction, Room room){
-        exits.put(direction, room);
+    public void setExit(String direction, Planet planet){
+        exits.put(direction, planet);
     }
 
-    public Room getExit(String direction) {
+    public Planet getExit(String direction) {
         return exits.get(direction);
     }
 
