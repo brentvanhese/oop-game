@@ -31,7 +31,6 @@ public class Game
     public Game()
     {
         player = new Player();
-        createPlanets();
         parser = new Parser();
         scanner = new Scanner(System.in);
     }
@@ -44,7 +43,7 @@ public class Game
         //name rooms and items
         Planet earth, neptunes, uranus, sun, mars, jupiter, mercurius, comet, saturnus, venus;
         Item bom1, bom2, bom3, O2Booster, code1, code2, code3;
-        Person elonMusk;
+        Person elonMusk, person1, person2, person3;
 
         // create the planets
         earth = new Planet("earth");
@@ -67,18 +66,18 @@ public class Game
         int unlockCode3 = unlockCodeGenerator.nextInt(high-low) + low;
 
         //create the items
-        bom1 = new Item("Bom1", "", 10.0);
+        bom1 = new Item("bom1", "", 10.0);
         bom1.setMovable(false);
-        bom2 = new Item("Bom2", "", 10.0);
+        bom2 = new Item("bom2", "", 10.0);
         bom2.setMovable(false);
-        bom3 = new Item("Bom3", "", 10.0);
+        bom3 = new Item("bom3", "", 10.0);
         bom3.setMovable(false);
-        O2Booster = new Item("O2-booster", "bring your O2 to 100%", 0.5);
-        code1 = new Item("Code1", Integer.toString(unlockCode1), 0.1);
+        O2Booster = new Item("o2-booster", "bring your O2 to 100%", 0.5);
+        code1 = new Item("code1", Integer.toString(unlockCode1), 0.1);
         bom1.setCode(unlockCode1);
-        code2 = new Item("Code2", Integer.toString(unlockCode2), 0.1);
+        code2 = new Item("code2", Integer.toString(unlockCode2), 0.1);
         bom2.setCode(unlockCode2);
-        code3 = new Item("Code3", Integer.toString(unlockCode3), 0.1);
+        code3 = new Item("code3", Integer.toString(unlockCode3), 0.1);
         bom3.setCode(unlockCode3);
 
         //create persons
@@ -92,8 +91,10 @@ public class Game
         txtElon+= "\n\t\t\t\tHold in mind that your spacesuit is still a prototype, so you will lose 15% on a normal planet and 20% gas planet. Everytime you go back in your Starship get 10%.";
         txtElon+= "\n\t\t\t\tGo save the world " + player.getName() + "!";
 
-        elonMusk = new Person("Elon Musk" , txtElon);
-
+        elonMusk = new Person("Elon-Musk", "elonmusk" , txtElon);
+        person1 = new Person("Person-1", "person1", "To unlock Bomb 1, you will need " + code1.getName());
+        person2 = new Person("Person2", "person2", "To unlock Bomb 2, you will need " + code2.getName());
+        person3 = new Person("Person3", "person3", "To unlock Bomb 3, you will need " + code3.getName());
         //add items to planets
         //todo put items and rooms in list and put the items in a random room except sun or comet
         earth.addItem(code1);
@@ -106,6 +107,7 @@ public class Game
 
         //add persons to planet
         earth.addPerson(elonMusk);
+        mars.addPerson(person1);
 
         // initialise planets exits
         earth.setExit("north", neptunes);
@@ -143,9 +145,8 @@ public class Game
     {
         System.out.print("Please enter your name: ");
         namePlayer = scanner.nextLine();
-
         player.setName(namePlayer);
-
+        createPlanets();
         printWelcome();
 
         // Enter the main command loop.  Here we repeatedly read commands and
@@ -165,6 +166,7 @@ public class Game
     //todo make person that talks to player when you see him for the first time
     private void printWelcome()
     {
+        System.out.println(player.getCurrentRoom().getPersonString("Elon Musk"));
         System.out.println();
         System.out.println();
         printLocationInfo();
@@ -212,6 +214,9 @@ public class Game
                 break;
             case UNLOCK:
                 unlock(command);
+                break;
+            case TALK:
+                talk(command);
                 break;
             default:
                 System.out.println("I don't know what you mean...");
@@ -345,6 +350,25 @@ public class Game
         }
         else {
             System.out.println("There is no item with name " + itemName);
+        }
+    }
+    //todo talk enkel uitvoeren als aangeroepen wordt
+    public void talk(Command command){
+        if (!command.hasSecondWord()){
+            System.out.println("Talk to who?");
+            return;
+        }
+        String personName = command.getSecondWord().toLowerCase().replace("-", "");
+        if (player.getCurrentRoom().hasPerson(personName)){
+            if (!player.getCurrentRoom().hasTalked(personName)){
+                System.out.println(player.getCurrentRoom().getPersonString(personName));
+            }
+            else {
+                System.out.println("You already talked with " + personName);
+            }
+        }
+        else {
+            System.out.println("There is no person with the name " + personName);
         }
     }
 }

@@ -69,24 +69,33 @@ public class Planet
     public String getLongDescription() {
         String info =  description;
         if (!items.isEmpty()){
-            info += ". This planet contains items:";
+            info += ". This planet contains";
             for (Item item : items) {
                 info += item.toString();
             }
+            if (!persons.isEmpty()){
+                for (Person p : persons) {
+                    if (!p.isShow()){
+                        info += p.showPersonInRoom();
+                    }
+                }
+            }
+
             info += "\n";
         }
         info += "\n" + getExitString();
         return info;
     }
 
-    public String getPersonString(){
+    public String getPersonString(String personName){
         String output = "";
-        if (persons.isEmpty()){
-            output = "";
-        }
-        else{
-            for (Person p : persons) {
-                output += "\n" + p.toString();
+        String changedName = personName.toLowerCase().replace(" ", "");
+        for (Person p : persons) {
+            if (p.getName().equals(changedName)){
+                if (!p.isShow()){
+                    output = "\n" + p.toString();
+                    p.setShow(true);
+                }
             }
         }
         return output;
@@ -124,5 +133,23 @@ public class Planet
             }
         }
         return null;
+    }
+
+    public boolean hasPerson(String personName){
+        for (Person p : persons) {
+            if (p.getName().equals(personName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasTalked(String personName){
+        for (Person p : persons) {
+            if (p.isShow()){
+                return true;
+            }
+        }
+        return false;
     }
 }

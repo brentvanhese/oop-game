@@ -70,8 +70,7 @@ public class Player {
 
     public String getInfo(){
         String info = "";
-        info += currentPlanet.getPersonString();
-        info += "\nMy name is " + name;
+        info += "My name is " + name;
         info += "\nOxygen: " + oxygen + "%";
         info += "\n" + getBagInfo();
         info += "And I am on " + currentPlanet.getLongDescription();
@@ -104,9 +103,9 @@ public class Player {
 
     public boolean use(String itemname){
         boolean check = false;
-        if (itemname.equals("O2-booster")){
+        if (itemname.equals("o2-booster")){
             for (Item i : bag) {
-                if(i.getName().equals("O2-booster")){
+                if(i.getName().equals("o2-booster")){
                     oxygen = 100;
                     check = true;
                     break;

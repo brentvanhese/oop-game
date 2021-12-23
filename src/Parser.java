@@ -43,9 +43,9 @@ public class Parser
         System.out.print("> ");     // print prompt
 
         inputLine = reader.nextLine();
-
+        String inputLineChecked = inputLine.toLowerCase();
         // Find up to two words on the line.
-        Scanner tokenizer = new Scanner(inputLine);
+        Scanner tokenizer = new Scanner(inputLineChecked);
         if(tokenizer.hasNext()) {
             word1 = tokenizer.next();      // get first word
             if(tokenizer.hasNext()) {
