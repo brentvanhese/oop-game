@@ -2,6 +2,7 @@ public class Person {
     private String displayName;
     private String name;
     private String text;
+    private String lockedText;
     private boolean show;
 
     public Person(String displayName, String name, String text) {
@@ -38,6 +39,14 @@ public class Person {
         this.show = show;
     }
 
+    public void setLockedText(String lockedText) {
+        this.lockedText = lockedText;
+    }
+
+    public String getLockedText() {
+        return lockedText;
+    }
+
     @Override
     public String toString() {
         return displayName + " : " + text;
@@ -45,5 +54,9 @@ public class Person {
 
     public String showPersonInRoom(){
         return "\n      " + displayName + " (talk with me to get a tip).";
+    }
+
+    public String showLockedText(){
+        return "\n" + displayName + " :\t" + lockedText + "\n";
     }
 }

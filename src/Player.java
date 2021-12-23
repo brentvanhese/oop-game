@@ -42,7 +42,7 @@ public class Player {
         return maxWeightInBag;
     }
 
-    public Planet getCurrentRoom() {
+    public Planet getCurrentPlanet() {
         return currentPlanet;
     }
 
@@ -79,7 +79,7 @@ public class Player {
     }
 
     public boolean go(String direction){
-        Planet nextPlanet = getCurrentRoom().getExit(direction);
+        Planet nextPlanet = getCurrentPlanet().getExit(direction);
         if (nextPlanet == null) return false;
         currentPlanet = nextPlanet;
         changeOxygen(nextPlanet);
@@ -171,6 +171,7 @@ public class Player {
         Item i = currentPlanet.getItem(itemName);
         if (i.getCode() == unlockCode){
             i.setMovable(true);
+            return true;
         }
         return false;
     }

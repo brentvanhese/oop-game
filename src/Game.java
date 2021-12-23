@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -24,6 +25,12 @@ public class Game
     private Player player;
     private String namePlayer;
     private Scanner scanner;
+    private ArrayList<Item> items;
+    private ArrayList<Person> persons;
+    private ArrayList<Planet> planets;
+    private ArrayList<Item> codes;
+    private ArrayList<Item> bombs;
+    private boolean talkedToBillGates;
 
     /**
      * Create the game and initialise its internal map.
@@ -33,6 +40,12 @@ public class Game
         player = new Player();
         parser = new Parser();
         scanner = new Scanner(System.in);
+        items = new ArrayList<>();
+        persons = new ArrayList<>();
+        planets = new ArrayList<>();
+        codes = new ArrayList<>();
+        bombs = new ArrayList<>();
+        talkedToBillGates = false;
     }
 
     /**
@@ -42,8 +55,8 @@ public class Game
     {
         //name rooms and items
         Planet earth, neptunes, uranus, sun, mars, jupiter, mercurius, comet, saturnus, venus;
-        Item bom1, bom2, bom3, O2Booster, code1, code2, code3;
-        Person elonMusk, person1, person2, person3;
+        Item bomb1, bomb2, bomb3, O2Booster, code1, code2, code3, code4;
+        Person elonMusk, billGates;
 
         // create the planets
         earth = new Planet("earth");
@@ -57,6 +70,15 @@ public class Game
         saturnus = new Planet("saturnus");
         venus = new Planet("venus");
 
+        //add planets in array
+        planets.add(neptunes);
+        planets.add(uranus);
+        planets.add(mars);
+        planets.add(jupiter);
+        planets.add(mercurius);
+        planets.add(saturnus);
+        planets.add(venus);
+
         //creat unlock codes
         Random unlockCodeGenerator = new Random();
         int low = 100000;
@@ -64,21 +86,40 @@ public class Game
         int unlockCode1 = unlockCodeGenerator.nextInt(high-low) + low;
         int unlockCode2 = unlockCodeGenerator.nextInt(high-low) + low;
         int unlockCode3 = unlockCodeGenerator.nextInt(high-low) + low;
+        int unlockCode4 = unlockCodeGenerator.nextInt(high-low) + low;
 
         //create the items
-        bom1 = new Item("bom1", "", 10.0);
-        bom1.setMovable(false);
-        bom2 = new Item("bom2", "", 10.0);
-        bom2.setMovable(false);
-        bom3 = new Item("bom3", "", 10.0);
-        bom3.setMovable(false);
+        bomb1 = new Item("bomb1", "", 10.0);
+        bomb1.setMovable(false);
+        bomb2 = new Item("bomb2", "", 10.0);
+        bomb2.setMovable(false);
+        bomb3 = new Item("bomb3", "", 10.0);
+        bomb3.setMovable(false);
         O2Booster = new Item("o2-booster", "bring your O2 to 100%", 0.5);
         code1 = new Item("code1", Integer.toString(unlockCode1), 0.1);
-        bom1.setCode(unlockCode1);
         code2 = new Item("code2", Integer.toString(unlockCode2), 0.1);
-        bom2.setCode(unlockCode2);
         code3 = new Item("code3", Integer.toString(unlockCode3), 0.1);
-        bom3.setCode(unlockCode3);
+        code4 = new Item("code4", Integer.toString(unlockCode4), 0.1);
+
+        //add items in array(items)
+        items.add(bomb1);
+        items.add(bomb2);
+        items.add(bomb3);
+        items.add(O2Booster);
+        items.add(code1);
+        items.add(code2);
+        items.add(code3);
+        items.add(code4);
+
+        //add codes in array
+        codes.add(code1);
+        codes.add(code2);
+        codes.add(code3);
+
+        //add bombs in array
+        bombs.add(bomb1);
+        bombs.add(bomb2);
+        bombs.add(bomb3);
 
         //create persons
         String txtElon = "";
@@ -92,22 +133,12 @@ public class Game
         txtElon+= "\n\t\t\t\tGo save the world " + player.getName() + "!";
 
         elonMusk = new Person("Elon-Musk", "elonmusk" , txtElon);
-        person1 = new Person("Person-1", "person1", "To unlock Bomb 1, you will need " + code1.getName());
-        person2 = new Person("Person2", "person2", "To unlock Bomb 2, you will need " + code2.getName());
-        person3 = new Person("Person3", "person3", "To unlock Bomb 3, you will need " + code3.getName());
-        //add items to planets
-        //todo put items and rooms in list and put the items in a random room except sun or comet
-        earth.addItem(code1);
-        earth.addItem(code2);
-        earth.addItem(code3);
-        neptunes.addItem(O2Booster);
-        mars.addItem(bom1);
-        mars.addItem(bom2);
-        mars.addItem(bom3);
+        billGates = new Person("Bill Gates", "billgates", "Thank you! I will everyone know that they now can help you. Good luck!");
+        billGates.setLockedText("Hi, I'm Bill Gates and the founder of 'Microsoft'. I forgot my Microsoft surface on earth. Go get it and then I will make sure that the others talk with you. See you soon!");
 
         //add persons to planet
         earth.addPerson(elonMusk);
-        mars.addPerson(person1);
+        comet.addPerson(billGates);
 
         // initialise planets exits
         earth.setExit("north", neptunes);
@@ -131,11 +162,60 @@ public class Game
         mars.setExit("west", earth);
         jupiter.setExit("south", mars);
 
-        player.setCurrentRoom(earth);  // start game earth
-
         //initialize gasplanets
         saturnus.setGasplaneet(true);
         jupiter.setGasplaneet(true);
+
+        // put random items + a person on a random planets
+        putPersonsAndItemsOnRandomPlanets();
+
+        // start game from earth
+        player.setCurrentRoom(earth);
+    }
+
+    public void putPersonsAndItemsOnRandomPlanets(){
+        Random random = new Random();
+
+        Person jeffBezos, richardBranson, timDodd;
+        jeffBezos = new Person("Jeff Bezos", "jeffbezos", "To unlock Bomb 1, you will need " + "");
+        jeffBezos.setLockedText("Hi, I'm Jeffrey P. Bezos and the founder of 'Blue Origin'. I know which code you need to unlock this bomb. But first you will need to find Bill Gates and do what he asks you.");
+        richardBranson = new Person("Richard Branson", "richardbranson", "To unlock Bomb 2, you will need " + "");
+        richardBranson.setLockedText("Hi, I'm Richard Branson and the founder of 'Virgin Galactic'. I know which code you need to unlock this bomb. But first you will need to find Bill Gates and do what he asks you.");
+        timDodd = new Person("Tim Dodd", "timdodd", "To unlock Bomb 3, you will need " + "");
+        timDodd.setLockedText("Hi, I'm Tim Dodd also known as the 'Everday Astronaut'. I know which code you need to unlock this bomb. But first you will need to find Bill Gates and do what he asks you.");
+
+
+        for (Planet planet : planets){
+            int randomIndex = random.nextInt(items.size());
+            Item item = items.get(randomIndex);
+            planet.addItem(item);
+            switch (item.getName()){
+                case "bomb1":
+                    planet.addPerson(jeffBezos);
+                    int randomCode1 = random.nextInt(codes.size());
+                    Item code1 = codes.get(randomCode1);
+                    item.setCode(Integer.parseInt(code1.getDescription()));
+                    codes.remove(randomCode1);
+                    break;
+                case "bomb2":
+                    planet.addPerson(richardBranson);
+                    int randomCode2 = random.nextInt(codes.size());
+                    Item code2 = codes.get(randomCode2);
+                    item.setCode(Integer.parseInt(code2.getDescription()));
+                    codes.remove(randomCode2);
+                    break;
+                case "bomb3":
+                    planet.addPerson(timDodd);
+                    int randomCode3 = random.nextInt(codes.size());
+                    Item code3 = codes.get(randomCode3);
+                    item.setCode(Integer.parseInt(code3.getDescription()));
+                    codes.remove(randomCode3);
+                    break;
+            }
+            items.remove(randomIndex);
+        }
+
+
     }
 
     /**
@@ -163,10 +243,10 @@ public class Game
     /**
      * Print out the opening message for the player.
      */
-    //todo make person that talks to player when you see him for the first time
+
     private void printWelcome()
     {
-        System.out.println(player.getCurrentRoom().getPersonString("Elon Musk"));
+        System.out.println(player.getCurrentPlanet().getPersonString("Elon Musk"));
         System.out.println();
         System.out.println();
         printLocationInfo();
@@ -262,9 +342,22 @@ public class Game
 
         // Try to leave current room.
         if (!player.go(direction)){
-            System.out.println("There is no door!");
+            System.out.println("There is no planet!");
         }else {
-            printLocationInfo();
+            if (!talkedToBillGates){
+                try{
+                    Person p = player.getCurrentPlanet().getPerson();
+                    if (!p.getName().equals("elonmusk")){
+                        if (!p.getName().equals("")){
+                            System.out.println(p.showLockedText());
+                        }
+                    }
+                    printLocationInfo();
+                }catch (NullPointerException n){
+                    printLocationInfo();
+                }
+            }
+            else printLocationInfo();
         }
     }
 
@@ -341,31 +434,41 @@ public class Game
         int unlockCode = scanner.nextInt();
         if (player.checkItem(itemName)){
             if(player.unlock(itemName, unlockCode)){
-                System.out.println("Wrong code, please try again.");
-            }
-            else {
                 System.out.println(itemName + " is unlocked.\n");
                 printLocationInfo();
+            }
+            else {
+                System.out.println("Wrong code, please try again.");
             }
         }
         else {
             System.out.println("There is no item with name " + itemName);
         }
     }
-    //todo talk enkel uitvoeren als aangeroepen wordt
+
     public void talk(Command command){
         if (!command.hasSecondWord()){
             System.out.println("Talk to who?");
             return;
         }
         String personName = command.getSecondWord().toLowerCase().replace("-", "");
-        if (player.getCurrentRoom().hasPerson(personName)){
-            if (!player.getCurrentRoom().hasTalked(personName)){
-                System.out.println(player.getCurrentRoom().getPersonString(personName));
+        if (player.getCurrentPlanet().hasPerson(personName)){
+            if (personName.equals("billgates")){
+                talkedToBillGates = true;
+            }
+            if (talkedToBillGates){
+                if (!player.getCurrentPlanet().hasTalked(personName)){
+                    System.out.println(player.getCurrentPlanet().getPersonString(personName));
+                }
+                else {
+                    System.out.println("You already talked with " + personName);
+                }
             }
             else {
-                System.out.println("You already talked with " + personName);
+                System.out.println(player.getCurrentPlanet().getLockedText(personName));
             }
+
+
         }
         else {
             System.out.println("There is no person with the name " + personName);

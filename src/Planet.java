@@ -152,4 +152,22 @@ public class Planet
         }
         return false;
     }
+
+    public String getLockedText(String personName){
+        String output = "";
+        for (Person p : persons) {
+            if (p.getName().equals(personName)){
+                output = p.getLockedText();
+                break;
+            }
+        }
+        return output;
+    }
+
+    public Person getPerson(){
+        for (Person p : persons) {
+            return p;
+        }
+        return null;
+    }
 }

@@ -4,6 +4,7 @@ public class Item {
     private double weight;
     private boolean isMovable;
     private int code;
+    private String location;
 
     public Item(String name, String description, double weight) {
         this.name = name;
@@ -38,6 +39,14 @@ public class Item {
 
     public boolean getIsMovable() {
         return isMovable;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override
