@@ -175,4 +175,16 @@ public class Player {
         }
         return false;
     }
+
+    public boolean destroy(String itemName){
+        boolean check = false;
+        if (itemName.equals("imac")){
+            if(currentPlanet.hasItem(itemName)){
+                Item imac = currentPlanet.getItem(itemName);
+                currentPlanet.removeItem(imac);
+                check = true;
+            }
+        }
+        return check;
+    }
 }

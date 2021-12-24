@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -26,7 +27,6 @@ public class Game
     private String namePlayer;
     private Scanner scanner;
     private ArrayList<Item> items;
-    private ArrayList<Person> persons;
     private ArrayList<Planet> planets;
     private ArrayList<Item> codes;
     private ArrayList<Item> bombs;
@@ -41,7 +41,6 @@ public class Game
         parser = new Parser();
         scanner = new Scanner(System.in);
         items = new ArrayList<>();
-        persons = new ArrayList<>();
         planets = new ArrayList<>();
         codes = new ArrayList<>();
         bombs = new ArrayList<>();
@@ -54,7 +53,7 @@ public class Game
     private void createPlanets()
     {
         //name rooms and items
-        Planet earth, neptunes, uranus, sun, mars, jupiter, mercurius, comet, saturnus, venus;
+        Planet earth, neptunes, uranus, sun, mars, jupiter, mercurius, comet, saturnus, venus, pluto;
         Item bomb1, bomb2, bomb3, O2Booster, code1, code2, code3, code4;
         Person elonMusk, billGates;
 
@@ -69,6 +68,7 @@ public class Game
         comet = new Planet("the comet");
         saturnus = new Planet("saturnus");
         venus = new Planet("venus");
+        pluto = new Planet("pluto");
 
         //add planets in array
         planets.add(neptunes);
@@ -78,6 +78,7 @@ public class Game
         planets.add(mercurius);
         planets.add(saturnus);
         planets.add(venus);
+        planets.add(pluto);
 
         //creat unlock codes
         Random unlockCodeGenerator = new Random();
@@ -134,7 +135,7 @@ public class Game
 
         elonMusk = new Person("Elon-Musk", "elonmusk" , txtElon);
         billGates = new Person("Bill Gates", "billgates", "Thank you! I will everyone know that they now can help you. Good luck!");
-        billGates.setLockedText("Hi, I'm Bill Gates and the founder of 'Microsoft'. I forgot my Microsoft surface on earth. Go get it and then I will make sure that the others talk with you. See you soon!");
+        billGates.setLockedText("Hi, I'm Bill Gates and the founder of 'Microsoft'. I can't connect to my Microsoft surface on earth because Apple is blocking the signal. Go destroy the Imac and bring my Microsoft surface. Then I will make sure that the others talk with you. See you soon!");
 
         //add persons to planet
         earth.addPerson(elonMusk);
@@ -149,6 +150,7 @@ public class Game
         uranus.setExit("west", neptunes);
         sun.setExit("east", saturnus);
         sun.setExit("south", neptunes);
+        sun.setExit("north", pluto);
         saturnus.setExit("east", venus);
         saturnus.setExit("south", comet);
         saturnus.setExit("west", sun);
@@ -161,6 +163,8 @@ public class Game
         mars.setExit("east", mercurius);
         mars.setExit("west", earth);
         jupiter.setExit("south", mars);
+        pluto.setExit("south", sun);
+
 
         //initialize gasplanets
         saturnus.setGasplaneet(true);
@@ -177,11 +181,12 @@ public class Game
         Random random = new Random();
 
         Person jeffBezos, richardBranson, timDodd;
-        jeffBezos = new Person("Jeff Bezos", "jeffbezos", "To unlock Bomb 1, you will need " + "");
+        jeffBezos = new Person("Jeff Bezos", "jeffbezos", "");
+
         jeffBezos.setLockedText("Hi, I'm Jeffrey P. Bezos and the founder of 'Blue Origin'. I know which code you need to unlock this bomb. But first you will need to find Bill Gates and do what he asks you.");
-        richardBranson = new Person("Richard Branson", "richardbranson", "To unlock Bomb 2, you will need " + "");
+        richardBranson = new Person("Richard Branson", "richardbranson", "");
         richardBranson.setLockedText("Hi, I'm Richard Branson and the founder of 'Virgin Galactic'. I know which code you need to unlock this bomb. But first you will need to find Bill Gates and do what he asks you.");
-        timDodd = new Person("Tim Dodd", "timdodd", "To unlock Bomb 3, you will need " + "");
+        timDodd = new Person("Tim Dodd", "timdodd", "");
         timDodd.setLockedText("Hi, I'm Tim Dodd also known as the 'Everday Astronaut'. I know which code you need to unlock this bomb. But first you will need to find Bill Gates and do what he asks you.");
 
 
@@ -195,6 +200,7 @@ public class Game
                     int randomCode1 = random.nextInt(codes.size());
                     Item code1 = codes.get(randomCode1);
                     item.setCode(Integer.parseInt(code1.getDescription()));
+                    jeffBezos.setText("To unlock Bomb 1, you will need " + code1.getName());
                     codes.remove(randomCode1);
                     break;
                 case "bomb2":
@@ -202,6 +208,7 @@ public class Game
                     int randomCode2 = random.nextInt(codes.size());
                     Item code2 = codes.get(randomCode2);
                     item.setCode(Integer.parseInt(code2.getDescription()));
+                    richardBranson.setText("To unlock Bomb 2, you will need " + code2.getName());
                     codes.remove(randomCode2);
                     break;
                 case "bomb3":
@@ -209,6 +216,7 @@ public class Game
                     int randomCode3 = random.nextInt(codes.size());
                     Item code3 = codes.get(randomCode3);
                     item.setCode(Integer.parseInt(code3.getDescription()));
+                    timDodd.setText("To unlock Bomb 3, you will need " + code3.getName());
                     codes.remove(randomCode3);
                     break;
             }
@@ -297,6 +305,9 @@ public class Game
                 break;
             case TALK:
                 talk(command);
+                break;
+            case DESTROY:
+                destroy(command);
                 break;
             default:
                 System.out.println("I don't know what you mean...");
@@ -454,7 +465,9 @@ public class Game
         String personName = command.getSecondWord().toLowerCase().replace("-", "");
         if (player.getCurrentPlanet().hasPerson(personName)){
             if (personName.equals("billgates")){
-                talkedToBillGates = true;
+                if (player.getCurrentPlanet().hasItem("microsoft-surface")){
+                    talkedToBillGates = true;
+                }
             }
             if (talkedToBillGates){
                 if (!player.getCurrentPlanet().hasTalked(personName)){
@@ -465,13 +478,27 @@ public class Game
                 }
             }
             else {
-                System.out.println(player.getCurrentPlanet().getLockedText(personName));
+                //System.out.println(player.getCurrentPlanet().getLockedText(personName));
+                System.out.println(player.getCurrentPlanet().getPerson().getDisplayName() + " :\tFirst you need to talk to Bill gates.");
             }
 
 
         }
         else {
             System.out.println("There is no person with the name " + personName);
+        }
+    }
+
+    public void destroy(Command command){
+        if (!command.hasSecondWord()){
+            System.out.println("Destroy what?");
+        }
+        String itemName = command.getSecondWord().toLowerCase();
+        if (player.destroy(itemName)){
+            System.out.println(itemName + " has been destroyed.");
+        }
+        else{
+            System.out.println("There is no item with name " + itemName);
         }
     }
 }

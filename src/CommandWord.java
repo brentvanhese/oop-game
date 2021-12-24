@@ -2,7 +2,7 @@
  * Alle geldige opdrachtwoorden voor het spel.
  */
 public enum CommandWord {
-    GO("go"), QUIT("quit"), HELP("help"), UNKNOWN(""), TAKE("take"), DROP("drop"), LOOK("look"), EAT("eat"), USE("use"), UNLOCK("unlock"), TALK("talk");
+    GO("go"), QUIT("quit"), HELP("help"), UNKNOWN(""), TAKE("take"), DROP("drop"), LOOK("look"), EAT("eat"), USE("use"), UNLOCK("unlock"), TALK("talk"), DESTROY("destroy");
 
     private String word;
 
