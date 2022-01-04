@@ -7,17 +7,31 @@ public class Player {
     private double maxWeightInBag;
     private Planet currentPlanet;
     private int oxygen = 100;
+    private boolean giveBillGatesLaptop;
+    private boolean talkedToBillGates;
+    private boolean allBombExploted;
+    private int countExplotedBombs;
+    private Planet previousPlanet;
 
     //constructor
     public Player(String name) {
         this.name = name;
         bag = new ArrayList<>();
         maxWeightInBag = 25;
+        giveBillGatesLaptop = false;
+        talkedToBillGates = false;
+        allBombExploted = false;
+        countExplotedBombs = 0;
     }
 
     public Player() {
         bag = new ArrayList<>();
         maxWeightInBag = 25;
+        giveBillGatesLaptop = false;
+        talkedToBillGates = false;
+        allBombExploted = false;
+        countExplotedBombs = 0;
+
     }
 
     //setters
@@ -33,6 +47,27 @@ public class Player {
         this.name = name;
     }
 
+    public void setOxygen(int oxygen) {
+        if (oxygen > 100) return;
+        this.oxygen = oxygen;
+    }
+
+    public void setGiveBillGatesLaptop(boolean giveBillGatesLaptop) {
+        this.giveBillGatesLaptop = giveBillGatesLaptop;
+    }
+
+    public void setTalkedToBillGates(boolean talkedToBillGates) {
+        this.talkedToBillGates = talkedToBillGates;
+    }
+
+    public void setAllBombExploted(boolean allBombExploted) {
+        this.allBombExploted = allBombExploted;
+    }
+
+    public void setPreviousPlanet(Planet previousPlanet) {
+        this.previousPlanet = previousPlanet;
+    }
+
     //getters
     public String getName() {
         return name;
@@ -46,9 +81,24 @@ public class Player {
         return currentPlanet;
     }
 
-    public void setOxygen(int oxygen) {
-        if (oxygen > 100) return;
-        this.oxygen = oxygen;
+    public boolean hasTalkedToBillGates() {
+        return talkedToBillGates;
+    }
+
+    public boolean hasGivenBillGatesLaptop() {
+        return giveBillGatesLaptop;
+    }
+
+    public boolean isAllBombExploted() {
+        return allBombExploted;
+    }
+
+    public int getCountExplotedBombs() {
+        return countExplotedBombs;
+    }
+
+    public Planet getPreviousPlanet() {
+        return previousPlanet;
     }
 
     //methodes
@@ -107,6 +157,7 @@ public class Player {
             for (Item i : bag) {
                 if(i.getName().equals("o2-booster")){
                     oxygen = 100;
+                    bag.remove(i);
                     check = true;
                     break;
                 }
@@ -186,5 +237,31 @@ public class Player {
             }
         }
         return check;
+    }
+
+    public boolean give(String itemName){
+        boolean check = false;
+        if (itemName.equals("microsoft-surface")){
+            if (hasItem(itemName)){
+                Item item = getItem(itemName);
+                if (currentPlanet.hasPerson("billgates")){
+                    bag.remove(item);
+                    check = true;
+                }
+            }
+        }
+        return check;
+    }
+
+    public boolean alive(){
+        boolean check = true;
+        if (oxygen <= 0){
+            check = false;
+        }
+        return check;
+    }
+
+    public void addExplotedBomb(){
+        countExplotedBombs += 1;
     }
 }

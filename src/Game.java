@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -30,7 +29,8 @@ public class Game
     private ArrayList<Planet> planets;
     private ArrayList<Item> codes;
     private ArrayList<Item> bombs;
-    private boolean talkedToBillGates;
+    private ArrayList<Item>invisableItems;
+    private ArrayList<Planet> checkPlanetForBomb;
 
     /**
      * Create the game and initialise its internal map.
@@ -44,7 +44,8 @@ public class Game
         planets = new ArrayList<>();
         codes = new ArrayList<>();
         bombs = new ArrayList<>();
-        talkedToBillGates = false;
+        invisableItems = new ArrayList<>();
+        checkPlanetForBomb = new ArrayList<>();
     }
 
     /**
@@ -54,7 +55,7 @@ public class Game
     {
         //name rooms and items
         Planet earth, neptunes, uranus, sun, mars, jupiter, mercurius, comet, saturnus, venus, pluto;
-        Item bomb1, bomb2, bomb3, O2Booster, code1, code2, code3, code4;
+        Item bomb1, bomb2, bomb3, O2Booster, code1, code2, code3, code4, imac, microsoftSurface;
         Person elonMusk, billGates;
 
         // create the planets
@@ -79,6 +80,7 @@ public class Game
         planets.add(saturnus);
         planets.add(venus);
         planets.add(pluto);
+        checkPlanetForBomb.add(comet);
 
         //creat unlock codes
         Random unlockCodeGenerator = new Random();
@@ -101,6 +103,10 @@ public class Game
         code2 = new Item("code2", Integer.toString(unlockCode2), 0.1);
         code3 = new Item("code3", Integer.toString(unlockCode3), 0.1);
         code4 = new Item("code4", Integer.toString(unlockCode4), 0.1);
+        imac = new Item("imac", "The microsoft server blokker", 4.48);
+        imac.setShow(false);
+        microsoftSurface = new Item("microsoft-surface", "The pc of Bill gates", 0.7);
+        microsoftSurface.setShow(false);
 
         //add items in array(items)
         items.add(bomb1);
@@ -122,6 +128,10 @@ public class Game
         bombs.add(bomb2);
         bombs.add(bomb3);
 
+        //add invisable items in array
+        invisableItems.add(imac);
+        invisableItems.add(microsoftSurface);
+
         //create persons
         String txtElon = "";
         txtElon += "\tWelcome SpaceX astronaut " + player.getName();
@@ -134,7 +144,7 @@ public class Game
         txtElon+= "\n\t\t\t\tGo save the world " + player.getName() + "!";
 
         elonMusk = new Person("Elon-Musk", "elonmusk" , txtElon);
-        billGates = new Person("Bill Gates", "billgates", "Thank you! I will everyone know that they now can help you. Good luck!");
+        billGates = new Person("Bill-Gates", "billgates", "Thank you! I will everyone know that they now can help you. Good luck!");
         billGates.setLockedText("Hi, I'm Bill Gates and the founder of 'Microsoft'. I can't connect to my Microsoft surface on earth because Apple is blocking the signal. Go destroy the Imac and bring my Microsoft surface. Then I will make sure that the others talk with you. See you soon!");
 
         //add persons to planet
@@ -165,6 +175,9 @@ public class Game
         jupiter.setExit("south", mars);
         pluto.setExit("south", sun);
 
+        //add invisable items to planets
+        earth.addItem(imac);
+        earth.addItem(microsoftSurface);
 
         //initialize gasplanets
         saturnus.setGasplaneet(true);
@@ -181,12 +194,13 @@ public class Game
         Random random = new Random();
 
         Person jeffBezos, richardBranson, timDodd;
-        jeffBezos = new Person("Jeff Bezos", "jeffbezos", "");
-
+        jeffBezos = new Person("Jeff-Bezos", "jeffbezos", "");
         jeffBezos.setLockedText("Hi, I'm Jeffrey P. Bezos and the founder of 'Blue Origin'. I know which code you need to unlock this bomb. But first you will need to find Bill Gates and do what he asks you.");
-        richardBranson = new Person("Richard Branson", "richardbranson", "");
+
+        richardBranson = new Person("Richard-Branson", "richardbranson", "");
         richardBranson.setLockedText("Hi, I'm Richard Branson and the founder of 'Virgin Galactic'. I know which code you need to unlock this bomb. But first you will need to find Bill Gates and do what he asks you.");
-        timDodd = new Person("Tim Dodd", "timdodd", "");
+
+        timDodd = new Person("Tim-Dodd", "timdodd", "");
         timDodd.setLockedText("Hi, I'm Tim Dodd also known as the 'Everday Astronaut'. I know which code you need to unlock this bomb. But first you will need to find Bill Gates and do what he asks you.");
 
 
@@ -244,6 +258,21 @@ public class Game
         while (! finished) {
             Command command = parser.getCommand();
             finished = processCommand(command);
+            if (!player.alive() || player.isAllBombExploted()){
+                finished = true;
+            }
+
+        }
+
+        printGoodbye();
+    }
+
+    private void printGoodbye(){
+        if (! player.alive()){
+            System.out.println("You ran out of oxygen and died.");
+        }
+        if (player.isAllBombExploted()){
+            System.out.println("congratulations you saved the world !!!");
         }
         System.out.println("Thank you for playing.  Good bye.");
     }
@@ -309,6 +338,15 @@ public class Game
             case DESTROY:
                 destroy(command);
                 break;
+            case GIVE:
+                give(command);
+                break;
+            case EXPLODE:
+                explode(command);
+                break;
+            case BACK:
+                back(command);
+                break;
             default:
                 System.out.println("I don't know what you mean...");
         }
@@ -350,17 +388,21 @@ public class Game
         }
 
         String direction = command.getSecondWord();
-
+        player.setPreviousPlanet(player.getCurrentPlanet());
         // Try to leave current room.
         if (!player.go(direction)){
             System.out.println("There is no planet!");
         }else {
-            if (!talkedToBillGates){
+            if (!player.hasGivenBillGatesLaptop()){
                 try{
                     Person p = player.getCurrentPlanet().getPerson();
                     if (!p.getName().equals("elonmusk")){
                         if (!p.getName().equals("")){
                             System.out.println(p.showLockedText());
+                        }
+                        if (p.getName().equals("billgates")){
+                            player.setTalkedToBillGates(true);
+                            showInvisableItems();
                         }
                     }
                     printLocationInfo();
@@ -369,7 +411,28 @@ public class Game
                 }
             }
             else printLocationInfo();
+
+
         }
+    }
+
+    private void back(Command command){
+        if (command.hasSecondWord()){
+            System.out.println("I don't know what you mean...");
+        }
+        try {
+            if(player.getPreviousPlanet().equals(player.getCurrentPlanet())){
+                System.out.println("You can only go the last planet you visited");
+            }
+            else {
+                player.setCurrentRoom(player.getPreviousPlanet());
+                printLocationInfo();
+            }
+        }
+        catch (NullPointerException npe){
+            System.out.println("You can't go back now");
+        }
+
     }
 
     /**
@@ -388,12 +451,12 @@ public class Game
         }
     }
 
-    public void eat(){
+    private void eat(){
         System.out.println("I have eaten and I am not hungry anymore");
         System.out.println();
     }
 
-    public void take(Command command){
+    private void take(Command command){
         if (!command.hasSecondWord()) {
             System.out.println("Take what?");
             return;
@@ -408,7 +471,7 @@ public class Game
         }
     }
 
-    public void drop(Command command){
+    private void drop(Command command){
         if (!command.hasSecondWord()){
             System.out.println("Drop what?");
             return;
@@ -421,7 +484,7 @@ public class Game
         }
     }
 
-    public void use(Command command){
+    private void use(Command command){
         if (!command.hasSecondWord()){
             System.out.println("Use what?");
             return;
@@ -435,7 +498,7 @@ public class Game
         }
     }
 
-    public void unlock(Command command){
+    private void unlock(Command command){
         if (!command.hasSecondWord()){
             System.out.println("Move what?");
             return;
@@ -457,7 +520,7 @@ public class Game
         }
     }
 
-    public void talk(Command command){
+    private void talk(Command command){
         if (!command.hasSecondWord()){
             System.out.println("Talk to who?");
             return;
@@ -466,10 +529,10 @@ public class Game
         if (player.getCurrentPlanet().hasPerson(personName)){
             if (personName.equals("billgates")){
                 if (player.getCurrentPlanet().hasItem("microsoft-surface")){
-                    talkedToBillGates = true;
+                    player.setGiveBillGatesLaptop(true);
                 }
             }
-            if (talkedToBillGates){
+            if (player.hasGivenBillGatesLaptop()){
                 if (!player.getCurrentPlanet().hasTalked(personName)){
                     System.out.println(player.getCurrentPlanet().getPersonString(personName));
                 }
@@ -489,9 +552,10 @@ public class Game
         }
     }
 
-    public void destroy(Command command){
+    private void destroy(Command command){
         if (!command.hasSecondWord()){
             System.out.println("Destroy what?");
+            return;
         }
         String itemName = command.getSecondWord().toLowerCase();
         if (player.destroy(itemName)){
@@ -500,5 +564,54 @@ public class Game
         else{
             System.out.println("There is no item with name " + itemName);
         }
+    }
+
+    private void give(Command command){
+        if (!command.hasSecondWord()){
+            System.out.println("Give what?");
+            return;
+        }
+        String itemName = command.getSecondWord().toLowerCase();
+        if (player.give(itemName)){
+            System.out.println("You gave " + player.getCurrentPlanet().getPerson().getDisplayName() + " his " + itemName);
+            player.setGiveBillGatesLaptop(true);
+            printLocationInfo();
+        }
+        else {
+            System.out.println("There is no item in your bag with the name " + itemName);
+        }
+    }
+    private void showInvisableItems(){
+        for (Item i : invisableItems) {
+            i.setShow(true);
+            i.setMovable(true);
+        }
+    }
+
+    private void explode(Command command){
+        if (!command.hasSecondWord()){
+            System.out.println("Explote what");
+        }
+        String itemName = command.getSecondWord().toLowerCase();
+        for (Planet p : checkPlanetForBomb) {
+            if (p.getDescription().equals("the comet")){
+                if (p.hasItem(itemName)){
+                    if (!player.getCurrentPlanet().getDescription().equals("the comet")){
+                        Item i  = p.getItem(itemName);
+                        p.removeItem(i);
+                        System.out.println(itemName + " exploded on " + p.getDescription());
+                        player.addExplotedBomb();
+                        if (player.getCountExplotedBombs() == 3){
+                            player.setAllBombExploted(true);
+                        }
+                        break;
+                    }
+                    else {
+                        System.out.println("You can't be here to let a bomb explode. Go to a planet.");
+                    }
+                }
+            }
+        }
+
     }
 }

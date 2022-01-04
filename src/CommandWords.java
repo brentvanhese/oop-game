@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -13,12 +14,9 @@ import java.util.HashMap;
 
 public class CommandWords
 {
-    // a constant array that holds all valid command words
-    /*private static final String[] validCommands = {
-        "go", "take", "drop", "look", "quit", "help", "eat"
-    };*/
-
     private HashMap<String, CommandWord> validCommands;
+    private ArrayList<String> validExplenation;
+    private ArrayList<String> commands;
 
     /**
      * Constructor - initialise the command words.
@@ -26,10 +24,14 @@ public class CommandWords
     public CommandWords()
     {
         validCommands = new HashMap<>();
+        validExplenation = new ArrayList<>();
+        commands = new ArrayList<>();
 
         for (CommandWord commandWord : CommandWord.values()) {
             if(commandWord!=CommandWord.UNKNOWN){
                 validCommands.put(commandWord.getWord(), commandWord);
+                commands.add(commandWord.getWord());
+                validExplenation.add(commandWord.getExplanation());
             }
         }
     }
@@ -46,8 +48,8 @@ public class CommandWords
 
     public String showAll() {
         String show = "";
-        for (String command : validCommands.keySet()) {
-            show += command + " ";
+        for (int i = 0; i < commands.size(); i++) {
+            show += commands.get(i) + " (" + validExplenation.get(i) + ")\n";
         }
         return show;
     }

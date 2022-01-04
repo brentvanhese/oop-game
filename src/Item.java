@@ -5,12 +5,14 @@ public class Item {
     private boolean isMovable;
     private int code;
     private String location;
+    private boolean show;
 
     public Item(String name, String description, double weight) {
         this.name = name;
         this.description = description;
         this.weight = weight;
         isMovable = true;
+        show = true;
     }
 
     public void setMovable(boolean movable) {
@@ -19,6 +21,14 @@ public class Item {
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setShow(boolean show) {
+        this.show = show;
     }
 
     public String getName() {
@@ -45,12 +55,16 @@ public class Item {
         return location;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public boolean isShow() {
+        return show;
     }
 
     @Override
     public String toString() {
-        return "\n      " + this.name + " (" +this.description +") with a weight of " + this.weight + "kg";
+        String output = "";
+        if (show){
+            output = "\n      " + this.name + " (" +this.description +") with a weight of " + this.weight + "kg";
+        }
+        return output;
     }
 }
