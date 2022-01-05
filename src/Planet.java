@@ -23,6 +23,7 @@ public class Planet
     public HashMap<String, Planet> exits;
     private ArrayList<Person> persons;
     private ArrayList<Item> items;
+    private boolean hasInvisableItems = false;
 
     /**
      * Create a room described "description". Initially, it has
@@ -44,6 +45,10 @@ public class Planet
 
     public void setGasplaneet(boolean gasplaneet) {
         this.gasplaneet = gasplaneet;
+    }
+
+    public void setHasInvisableItems(boolean hasInvisableItems) {
+        this.hasInvisableItems = hasInvisableItems;
     }
 
     public void addItem(Item item) {
@@ -69,22 +74,29 @@ public class Planet
     public String getLongDescription() {
         String info =  description;
         if (!items.isEmpty()){
-            info += ". This planet contains";
-            for (Item item : items) {
-                info += item.toString();
-            }
-            if (!persons.isEmpty()){
-                for (Person p : persons) {
-                    if (!p.isShow()){
-                        info += p.showPersonInRoom();
+            if (!hasInvisableItems){
+                info += ". This planet contains";
+                for (Item item : items) {
+                    info += item.toString();
+                }
+                if (!persons.isEmpty()){
+                    for (Person p : persons) {
+                        if (!p.isShow()){
+                            info += p.showPersonInRoom();
+                        }
                     }
                 }
+
+                info += "\n";
             }
 
-            info += "\n";
         }
         info += "\n" + getExitString();
         return info;
+    }
+
+    public String planetInfo(){
+        return "I am on " + getLongDescription();
     }
 
     public String getPersonString(String personName){

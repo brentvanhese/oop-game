@@ -106,7 +106,7 @@ public class Player {
         bag.add(item);
     }
 
-    private String getBagInfo(){
+    public String getBagInfo(){
         String bagInfo = "";
         if (!bag.isEmpty()){
             bagInfo += "I have a bag which contains: ";
@@ -125,6 +125,13 @@ public class Player {
         info += "\n" + getBagInfo();
         info += "And I am on " + currentPlanet.getLongDescription();
 
+        return info;
+    }
+
+    public String lookInfo(){
+        String info = "My name is " + name;
+        info += "\nOxygen: " + oxygen + "%";
+        info += "\n" + getBagInfo();
         return info;
     }
 

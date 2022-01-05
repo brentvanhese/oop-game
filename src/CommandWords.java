@@ -49,7 +49,7 @@ public class CommandWords
     public String showAll() {
         String show = "";
         for (int i = 0; i < commands.size(); i++) {
-            show += commands.get(i) + " (" + validExplenation.get(i) + ")\n";
+            show += commands.get(i) + " :\t\t(" + validExplenation.get(i) + ")\n";
         }
         return show;
     }
