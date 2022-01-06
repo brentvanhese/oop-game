@@ -36,6 +36,9 @@ public class Game
     private ArrayList<Item>invisableItems;
     private ArrayList<Planet> otherPlanets;
 
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED= "\u001B[31m";
+
     /**
      * Create the game and initialise its internal map.
      */
@@ -53,7 +56,10 @@ public class Game
     }
 
     /**
-     * Create all the rooms and link their exits together.
+     * Create all the planets and link their exits together.
+     * Create all items
+     * Create all the persons
+     * Add all in list
      */
     private void createPlanets()
     {
@@ -196,6 +202,9 @@ public class Game
         player.setCurrentRoom(earth);
     }
 
+    /**
+     * Put items on random planets
+     */
     public void putPersonsAndItemsOnRandomPlanets(){
         Random random = new Random();
 
@@ -248,6 +257,7 @@ public class Game
 
     /**
      *  Main play routine.  Loops until end of play.
+     *  Checks for the oxygen of a player and checks or that all the bombs have exploded
      */
     public void play()
     {
@@ -275,7 +285,7 @@ public class Game
 
     /**
      * Print out the end message for the player
-     * There is a default message which can have an
+     * There is a default message which can have an extra message if you are out of oxygen or that all the bombs exploded
      */
     private void printGoodbye(){
         if (! player.alive()){
@@ -283,6 +293,9 @@ public class Game
         }
         if (player.isAllBombExploted()){
             System.out.println("congratulations you saved the world !!!");
+        }
+        if (player.isBurned()){
+            System.out.println("You burned up on the sun.");
         }
         System.out.println("Thank you for playing.  Good bye.");
     }
@@ -312,54 +325,65 @@ public class Game
             return false;
         }
         CommandWord commandWord = command.getCommandWord();
-        switch (commandWord){
-            case HELP:
-                printHelp();
-                break;
-            case GO:
+        if (player.getCurrentPlanet().getDescription().equals("the sun")){
+            if (command.getCommandWord().getWord().equals("go")){
                 goRoom(command);
-                break;
-            case TAKE:
-                take(command);
-                break;
-            case DROP:
-                drop(command);
-                break;
-            case QUIT:
-                wantToQuit = quit(command);
-                break;
-            case LOOK:
-                look(command);
-                break;
-            case EAT:
-                eat();
-                break;
-            case USE:
-                use(command);
-                break;
-            case UNLOCK:
-                unlock(command);
-                break;
-            case TALK:
-                talk(command);
-                break;
-            case DESTROY:
-                destroy(command);
-                break;
-            case GIVE:
-                give(command);
-                break;
-            case EXPLODE:
-                explode(command);
-                break;
-            case BACK:
-                back(command);
-                break;
-            case ITEMS:
-                showItems(command);
-                break;
-            default:
-                System.out.println("I don't know what you mean...");
+            }
+            else{
+                player.setBurned(true);
+                wantToQuit = true;
+            }
+        }
+        else {
+            switch (commandWord){
+                case HELP:
+                    printHelp();
+                    break;
+                case GO:
+                    goRoom(command);
+                    break;
+                case TAKE:
+                    take(command);
+                    break;
+                case DROP:
+                    drop(command);
+                    break;
+                case QUIT:
+                    wantToQuit = quit(command);
+                    break;
+                case LOOK:
+                    look(command);
+                    break;
+                case EAT:
+                    eat();
+                    break;
+                case USE:
+                    use(command);
+                    break;
+                case UNLOCK:
+                    unlock(command);
+                    break;
+                case TALK:
+                    talk(command);
+                    break;
+                case DESTROY:
+                    destroy(command);
+                    break;
+                case GIVE:
+                    give(command);
+                    break;
+                case EXPLODE:
+                    explode(command);
+                    break;
+                case BACK:
+                    back(command);
+                    break;
+                case ITEMS:
+                    showItems(command);
+                    break;
+                default:
+                    System.out.println("I don't know what you mean...");
+            }
         }
         return wantToQuit;
     }
@@ -380,13 +404,19 @@ public class Game
     }
 
     /**
-     *
+     * Print out the info of the player + the planet
      */
     private void printLocationInfo() {
         System.out.println(player.getInfo());
         System.out.println();
     }
 
+    /**
+     * Without a second word in the command it execute printLocationInfo
+     * If the second word of the command is: 'Planet', it prints out the planet info
+     * If the second word of the command is: 'Person', it prints out the info of the player
+     * @param command The command to be processed.
+     */
     private void look(Command command){
         if (!command.hasSecondWord()){
             printLocationInfo();
@@ -407,6 +437,7 @@ public class Game
     /**
      * Try to go in one direction. If there is an exit, enter
      * the new room, otherwise print an error message.
+     * @param command The command to be processed.
      */
     private void goRoom(Command command)
     {
@@ -424,7 +455,7 @@ public class Game
         }else {
             if (player.getCurrentPlanet().getDescription().equals("the sun")){
                 printLocationInfo();
-                System.out.println("You need to go away or you will die");
+                System.out.println(ANSI_RED + "You need to go away or you will die" + ANSI_RESET);
             }
             else{
                 if (!player.hasGivenBillGatesLaptop()){
@@ -451,6 +482,7 @@ public class Game
 
     /**
      *
+     * @param command The command to be processed.
      */
     private void back(Command command){
         if (command.hasSecondWord()){
@@ -654,12 +686,11 @@ public class Game
             i.setShow(true);
             i.setMovable(true);
         }
-
-
     }
 
     /**
      *
+     * @param command
      */
     private void explode(Command command){
         if (!command.hasSecondWord()){

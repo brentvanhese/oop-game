@@ -12,6 +12,7 @@ public class Player {
     private boolean allBombExploted;
     private int countExplotedBombs;
     private Planet previousPlanet;
+    private boolean burned;
 
     //constructor
     public Player(String name) {
@@ -22,6 +23,7 @@ public class Player {
         talkedToBillGates = false;
         allBombExploted = false;
         countExplotedBombs = 0;
+        burned = false;
     }
 
     public Player() {
@@ -31,7 +33,7 @@ public class Player {
         talkedToBillGates = false;
         allBombExploted = false;
         countExplotedBombs = 0;
-
+        burned = false;
     }
 
     //setters
@@ -68,6 +70,10 @@ public class Player {
         this.previousPlanet = previousPlanet;
     }
 
+    public void setBurned(boolean burned) {
+        this.burned = burned;
+    }
+
     //getters
     public String getName() {
         return name;
@@ -99,6 +105,10 @@ public class Player {
 
     public Planet getPreviousPlanet() {
         return previousPlanet;
+    }
+
+    public boolean isBurned() {
+        return burned;
     }
 
     //methodes
