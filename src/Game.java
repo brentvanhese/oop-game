@@ -358,9 +358,6 @@ public class Game
                 case LOOK:
                     look(command);
                     break;
-                case EAT:
-                    eat();
-                    break;
                 case USE:
                     use(command);
                     break;
@@ -524,11 +521,6 @@ public class Game
         else {
             return true;  // signal that we want to quit
         }
-    }
-
-    private void eat(){
-        System.out.println("I have eaten and I am not hungry anymore");
-        System.out.println();
     }
 
     /**
