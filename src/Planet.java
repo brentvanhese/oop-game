@@ -12,8 +12,7 @@ import java.util.HashMap;
  * east, south, west.  For each direction, the room stores a reference
  * to the neighboring room, or null if there is no exit in that direction.
  *
- * @author  Michael Kölling and David J. Barnes
- * @version 2011.07.31
+ * @author  Brent Van Hese
  */
 
 public class Planet
@@ -26,7 +25,7 @@ public class Planet
     private boolean hasInvisableItems = false;
 
     /**
-     * Create a room described "description". Initially, it has
+     * Create a planet described "description". Initially, it has
      * no exits. "description" is something like "a kitchen" or
      * "an open court yard".
      * @param description The room's description.
@@ -39,10 +38,12 @@ public class Planet
         persons = new ArrayList<>();
     }
 
+    //getters
     public boolean isGasplaneet() {
         return gasplaneet;
     }
 
+    //setters
     public void setGasplaneet(boolean gasplaneet) {
         this.gasplaneet = gasplaneet;
     }
@@ -71,6 +72,9 @@ public class Planet
         return description;
     }
 
+    /**
+     * @return all the info of the planet
+     */
     public String getLongDescription() {
         String info =  description;
         if (!items.isEmpty()){
@@ -95,10 +99,17 @@ public class Planet
         return info;
     }
 
+    /**
+     * @return the info for the 'look planet' command
+     */
     public String planetInfo(){
         return "I am on " + getLongDescription();
     }
 
+    /**
+     * @param personName name of the person of who the player wants the text
+     * @return the text of the person
+     */
     public String getPersonString(String personName){
         String output = "";
         String changedName = personName.toLowerCase().replace(" ", "");
@@ -121,6 +132,9 @@ public class Planet
         return exits.get(direction);
     }
 
+    /**
+     * @return the possible directions a player can go to from a planet
+     */
     public String getExitString(){
         String exitString = "Exits: ";
         for (String direction : exits.keySet()){
@@ -129,6 +143,11 @@ public class Planet
         return exitString;
     }
 
+    /**
+     * check if an item is on a planet
+     * @param name name of the item
+     * @return true if the item is on the planet | false if the item isn't on the planet
+     */
     public boolean hasItem(String name){
         for (Item item : items) {
             if (item.getName().equals(name)){
@@ -138,6 +157,11 @@ public class Planet
         return false;
     }
 
+    /**
+     * get an item from a planet
+     * @param itemName the name of the item
+     * @return the item the player wants
+     */
     public Item getItem(String itemName){
         for (Item item : items) {
             if (item.getName().equals(itemName)){
@@ -147,6 +171,11 @@ public class Planet
         return null;
     }
 
+    /**
+     * check if person is on that planet
+     * @param personName name of the person
+     * @return true if the person is on the planet | false if he/she isn't
+     */
     public boolean hasPerson(String personName){
         for (Person p : persons) {
             if (p.getName().equals(personName)){
@@ -156,6 +185,11 @@ public class Planet
         return false;
     }
 
+    /**
+     * Check whether a person has talked with the player
+     * @param personName name of the person
+     * @return true if he/she has talked with the player | false if he/she hasn't
+     */
     public boolean hasTalked(String personName){
         for (Person p : persons) {
             if (p.isShow()){
@@ -165,6 +199,11 @@ public class Planet
         return false;
     }
 
+    /**
+     * get the text of a person when the player hasn't talked with bill gates
+     * @param personName name of the person
+     * @return the text of the person when he/she is locked
+     */
     public String getLockedText(String personName){
         String output = "";
         for (Person p : persons) {

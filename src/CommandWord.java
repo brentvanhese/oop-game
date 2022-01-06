@@ -1,5 +1,6 @@
 /**
- * Alle geldige opdrachtwoorden voor het spel.
+ * All valid command words for the game
+ * @author Brent Van Hese
  */
 public enum CommandWord {
     GO("go", "Type 'go' + the direction you want to go too"),
@@ -21,15 +22,28 @@ public enum CommandWord {
 
     private String word, explanation;
 
+    /**
+     * constructor
+     * @param word the command word
+     * @param explanation the explanation of the command word
+     */
     CommandWord(String word, String explanation){
         this.word = word;
         this.explanation = explanation;
     }
 
+    /**
+     * getter for the command word
+     * @return command word
+     */
     public String getWord() {
         return word;
     }
 
+    /**
+     *
+     * @return explanation of the command word
+     */
     public String getExplanation(){
         return explanation;
     }

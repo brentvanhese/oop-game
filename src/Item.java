@@ -1,3 +1,10 @@
+/**
+ * This class has all the info of an item
+ *
+ * It can change the amount of xp
+ * @author Brent Van Hese
+ */
+
 public class Item {
     private String name;
     private String description;
@@ -6,6 +13,8 @@ public class Item {
     private int code;
     private String location;
     private boolean show;
+    private int xp;
+    private int amountOfWrongCode;
 
     public Item(String name, String description, double weight) {
         this.name = name;
@@ -13,8 +22,11 @@ public class Item {
         this.weight = weight;
         isMovable = true;
         show = true;
+        xp = 0;
+        amountOfWrongCode = 0;
     }
 
+    //setters
     public void setMovable(boolean movable) {
         isMovable = movable;
     }
@@ -31,6 +43,11 @@ public class Item {
         this.show = show;
     }
 
+    public void setXp(int xp) {
+        this.xp = xp;
+    }
+
+    //getters
     public String getName() {
         return name;
     }
@@ -59,6 +76,13 @@ public class Item {
         return show;
     }
 
+    public int getXp() {
+        return xp;
+    }
+
+    /**
+     * @return all the info of an item
+     */
     @Override
     public String toString() {
         String output = "";
@@ -66,5 +90,19 @@ public class Item {
             output = "\n      " + this.name + " (" +this.description +") with a weight of " + this.weight + "kg";
         }
         return output;
+    }
+
+    /**
+     * If the player wants to unlock a bomb, and he gives the wrong unlock code he loses 50% of the xp he can earn
+     * If his second unlock code is also wrong, then he can't get xp for that item
+     */
+    public void wrongCode(){
+        if (amountOfWrongCode != 1){
+            xp = xp /2;
+            amountOfWrongCode++;
+        }
+        else {
+            xp = 0;
+        }
     }
 }

@@ -1,10 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-//todo documentatie toevoegen
-//todo klasse bombs maken
-//todo max-gewicht?
-//todo xp toevoegen?
 //todo scoreboard?
 /**
  *  This class is the main class of the "World of Zuul" application.
@@ -16,11 +12,10 @@ import java.util.Scanner;
  *  method.
  *
  *  This main class creates and initialises all the others: it creates all
- *  rooms, creates the parser and starts the game.  It also evaluates and
+ *  planets, items and persons. Creates the parser and starts the game.  It also evaluates and
  *  executes the commands that the parser returns.
  *
- * @author  Michael Kölling and David J. Barnes
- * @version 2011.07.31
+ * @author  Brent Van Hese
  */
 
 public class Game
@@ -106,10 +101,13 @@ public class Game
         //create the items
         bomb1 = new Item("bomb1", "", 10.0);
         bomb1.setMovable(false);
+        bomb1.setXp(200);
         bomb2 = new Item("bomb2", "", 10.0);
         bomb2.setMovable(false);
+        bomb2.setXp(200);
         bomb3 = new Item("bomb3", "", 10.0);
         bomb3.setMovable(false);
+        bomb3.setXp(200);
         O2Booster = new Item("o2-booster", "bring your O2 to 100%", 0.5);
         code1 = new Item("code1", Integer.toString(unlockCode1), 0.1);
         code2 = new Item("code2", Integer.toString(unlockCode2), 0.1);
@@ -210,6 +208,7 @@ public class Game
     public void putPersonsAndItemsOnRandomPlanets(){
         Random random = new Random();
 
+        //create persons for telling which code the player needs to unlock the bomb
         Person jeffBezos, richardBranson, timDodd;
         jeffBezos = new Person("Jeff-Bezos", "jeffbezos", "");
         jeffBezos.setLockedText("Hi, I'm Jeffrey P. Bezos and the founder of 'Blue Origin'. I know which code you need to unlock this bomb. But first you will need to find Bill Gates and do what he asks you.");
@@ -287,7 +286,8 @@ public class Game
 
     /**
      * Print out the end message for the player
-     * There is a default message which can have an extra message if you are out of oxygen or that all the bombs exploded
+     * There is a default message which can have an extra message if you are out of oxygen, that all the bombs exploded or if you burned up on the sun
+     * also you can see your xp
      */
     private void printGoodbye(){
         if (! player.alive()){
@@ -299,6 +299,8 @@ public class Game
         if (player.isBurned()){
             System.out.println("You burned up on the sun.");
         }
+        System.out.println();
+        System.out.println("You had " + player.getXp() + " XP");
         System.out.println("Thank you for playing.  Good bye.");
     }
 
@@ -327,6 +329,7 @@ public class Game
             return false;
         }
         CommandWord commandWord = command.getCommandWord();
+        //if you are on the sun you can only give 1 command and is to leave otherwise you die
         if (player.getCurrentPlanet().getDescription().equals("the sun")){
             if (command.getCommandWord().getWord().equals("go")){
                 goRoom(command);
@@ -483,7 +486,9 @@ public class Game
     }
 
     /**
-     *
+     * to go back to the previous planet
+     * you can only go one planet back
+     * otherwise you get an error
      * @param command The command to be processed.
      */
     private void back(Command command){
@@ -508,6 +513,7 @@ public class Game
     /**
      * "Quit" was entered. Check the rest of the command to see
      * whether we really quit the game.
+     * @param command The command to be processed.
      * @return true, if this command quits the game, false otherwise.
      */
     private boolean quit(Command command)
@@ -527,7 +533,8 @@ public class Game
     }
 
     /**
-     *
+     * take an item from the planet and put it in the players bag
+     * @param command The command to be processed.
      */
     private void take(Command command){
         if (!command.hasSecondWord()) {
@@ -545,7 +552,8 @@ public class Game
     }
 
     /**
-     *
+     * Put an item out of the players bag on the planet
+     * @param command The command to be processed.
      */
     private void drop(Command command){
         if (!command.hasSecondWord()){
@@ -561,7 +569,8 @@ public class Game
     }
 
     /**
-     *
+     * Use an item out of the players bag
+     * @param command The command to be processed.
      */
     private void use(Command command){
         if (!command.hasSecondWord()){
@@ -578,7 +587,8 @@ public class Game
     }
 
     /**
-     *
+     * unlock a locked item so the player can put it in his bag
+     * @param command The command to be processed.
      */
     private void unlock(Command command){
         if (!command.hasSecondWord()){
@@ -603,7 +613,8 @@ public class Game
     }
 
     /**
-     *
+     * talk with a person on a planet
+     * @param command The command to be processed.
      */
     private void talk(Command command){
         if (!command.hasSecondWord()){
@@ -638,7 +649,8 @@ public class Game
     }
 
     /**
-     *
+     * destroy an item on a planet
+     * @param command The command to be processed.
      */
     private void destroy(Command command){
         if (!command.hasSecondWord()){
@@ -655,7 +667,8 @@ public class Game
     }
 
     /**
-     *
+     * give an item to a person, then he/she will help you
+     * @param command The command to be processed.
      */
     private void give(Command command){
         if (!command.hasSecondWord()){
@@ -675,7 +688,7 @@ public class Game
     }
 
     /**
-     *
+     * if bill gates have said something to you, show the hidden items on earth
      */
     private void showInvisibleItems(){
         for (Planet p : otherPlanets){
@@ -691,8 +704,9 @@ public class Game
     }
 
     /**
-     *
-     * @param command
+     * let a bomb explode
+     * the bomb needs to be on the comet, and the player can't be on the comet
+     * @param command The command to be processed.
      */
     private void explode(Command command){
         if (!command.hasSecondWord()){
@@ -720,6 +734,10 @@ public class Game
         }
     }
 
+    /**
+     * Show all the items in the players bag with their weight
+     * @param command The command to be processed.
+     */
     private void showItems(Command command){
         if (command.hasSecondWord()){
             System.out.println("I don't know what you mean...");

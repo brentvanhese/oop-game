@@ -1,3 +1,9 @@
+/**
+ * This class has all the info of a person
+ *
+ * @author Brent Van Hese
+ */
+
 public class Person {
     private String displayName;
     private String name;
