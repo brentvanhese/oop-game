@@ -52,6 +52,7 @@ public class Player {
 
     public void setCurrentRoom(Planet currentPlanet) {
         this.currentPlanet = currentPlanet;
+        changeOxygen(this.currentPlanet);
     }
 
     public void setName(String name){
