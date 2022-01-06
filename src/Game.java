@@ -151,8 +151,10 @@ public class Game
         txtElon+= "\n\t\t\t\tYou are the only astronaut that can fly our Starship 5.0.";
         txtElon+= "\n\t\t\t\tYou need to fly it to all the planets. We have put on different planets bombs and codes to unlock them.";
         txtElon+= "\n\t\t\t\tWe don't know anymore where we have put them and the computer where we had written it has crashed.";
-        txtElon+= "\n\t\t\t\tPlease go get the bombs and put them on the comet, so that you can them explote from earth.";
-        txtElon+= "\n\t\t\t\tHold in mind that your spacesuit is still a prototype, so you will lose 15% on a normal planet and 20% gas planet. Everytime you go back in your Starship get 10%.";
+        txtElon+= "\n\t\t\t\tPlease go get the bombs and put them on the comet, so that you can let them explode from earth.";
+        txtElon+= "\n\t\t\t\tHold in mind that your spacesuit is still a prototype, so you will lose 15% oxygen on a normal planet and 20% oxygen gas planet.";
+        txtElon+= "\n\t\t\t\tEverytime you go back in your Starship get 10%.";
+        txtElon+= "\n\t\t\t\tType help to see all the command words that you can use.";
         txtElon+= "\n\t\t\t\tGo save the world " + player.getName() + "!";
 
         elonMusk = new Person("Elon-Musk", "elonmusk" , txtElon);
@@ -305,7 +307,7 @@ public class Game
      */
     private void printWelcome()
     {
-        System.out.println(player.getCurrentPlanet().getPersonString("Elon Musk")); //todo welkom tekst verbeteren
+        System.out.println(player.getCurrentPlanet().getPersonString("Elon Musk"));
         System.out.println();
         System.out.println();
         printLocationInfo();
