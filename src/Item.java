@@ -94,7 +94,7 @@ public class Item {
 
     /**
      * If the player wants to unlock a bomb, and he gives the wrong unlock code he loses 50% of the xp he can earn
-     * If his second unlock code is also wrong, then he can't get xp for that item
+     * If his second unlock code is also wrong, he won't get any xp
      */
     public void wrongCode(){
         if (amountOfWrongCode != 1){
